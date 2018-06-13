@@ -15,9 +15,9 @@ module.exports = {
   run: function(creep) {
     var targets = creep.room.find(FIND_STRUCTURES, {
       filter: structure => {
-        return;
-        creep.memory.dropoff.indexOf(structure.structureType) != -1 &&
-          structure.energy < structure.energyCapacity;
+        var validStructure = creep.memory.dropoff.indexOf(structure.structureType) != -1;
+        var needsEnergy = structure.energy < structure.energyCapacity;
+        return validStructure && needsEnergy;
       },
     });
 
