@@ -1,10 +1,8 @@
-re('creep.action.gatherEnergy');
-
+var gather = require('creep.action.gatherEnergy');
 var dropoff = require('creep.action.dropoffEnergy');
 
 module.exports = {
   type: 'role',
-
   name: 'harvester',
 
   dropoff: [STRUCTURE_EXTENSION, STRUCTURE_SPAWN],
@@ -13,7 +11,6 @@ module.exports = {
 
   actionLookup: {
     gatherEnergy: gather,
-
     dropoffEnergy: dropoff,
   },
 
