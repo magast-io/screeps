@@ -27,7 +27,11 @@ module.exports = {
               for (var z in entities) {
                 var entity = entities[z];
                 if (entity.type == 'terrain' && entity.terrain == 'plain') {
-                  memory.miningPositions.push({pos: pos, source: source.id, safe: false});
+                  memory.miningPositions.push({
+                    pos: pos,
+                    source: source.id,
+                    safe: false,
+                  });
                 }
               }
             }
@@ -39,8 +43,8 @@ module.exports = {
       for (var i = 0; i < memory.miningPositions.length; i++) {
         let coords = memory.miningPositions[i].pos;
         let pos = memory.getPositionAt(coords.x, coords.y);
-        let hostile = pos .findClosestByRange(FIND_HOSTILE_CREEPS);
-        room.safe = !hostile.pos.inRangeTo(pos)
+        let hostile = pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        room.safe = !hostile.pos.inRangeTo(pos);
       }
     }
   },
