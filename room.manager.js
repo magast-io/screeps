@@ -2,6 +2,7 @@ module.exports = {
   /** @param Room room**/
   run: function(room) {
     const UPDATE_EVERY = 100;
+
     //Find all valid energy mining spots
     var memory = room.memory;
     var needsUpdate;
@@ -26,12 +27,20 @@ module.exports = {
               for (var z in entities) {
                 var entity = entities[z];
                 if (entity.type == 'terrain' && entity.terrain == 'plain') {
-                  memory.miningPositions.push({pos: pos, source: source.id});
+                  memory.miningPositions.push({pos: pos, source: source.id, safe: false});
                 }
               }
             }
           }
         }
+      }
+
+      //Check if mining positions are safe
+      for (var i = 0; i < memory.miningPositions.length; i++) {
+        let coords = memory.miningPositions[i].pos;
+        let pos = memory.getPositionAt(coords.x, coords.y);
+        let hostile = pos .findClosestByRange(FIND_HOSTILE_CREEPS);
+        room.safe = !hostile.pos.inRangeTo(pos)
       }
     }
   },
