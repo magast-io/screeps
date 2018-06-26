@@ -11,7 +11,6 @@ module.exports = {
   },
 
   /** @param {Creep} creep **/
-
   run: function(creep) {
     var targets = creep.room.find(FIND_STRUCTURES, {
       filter: structure => {

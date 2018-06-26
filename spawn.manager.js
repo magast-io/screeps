@@ -45,11 +45,11 @@ module.exports = {
       } else if (
         creepRoleCounts[roleUpgrader.name] < Math.floor(targetCreepCount * 0.25)
       ) {
-        //var newName = roleUpgrader.name + Game.time;
-        //spawn.spawnCreep([WORK, CARRY, MOVE], newName, {memory: { role: roleUpgrader.name }});
+        var newName = roleUpgrader.name + Game.time;
+        spawn.spawnCreep([WORK, CARRY, MOVE], newName, {memory: { role: roleUpgrader.name }});
       } else if (creepRoleCounts[roleBuilder.name] < 1) {
-        //var newName = roleBuilder.name + Game.time;
-        //spawn.spawnCreep([WORK, CARRY, MOVE], newName, {memory: { role: roleBuilder.name }});
+        var newName = roleBuilder.name + Game.time;
+        spawn.spawnCreep([WORK, CARRY, MOVE], newName, {memory: { role: roleBuilder.name }});
       }
     }
   },

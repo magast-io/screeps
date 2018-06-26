@@ -15,14 +15,11 @@ module.exports = {
   },
 
   /** @param {Creep} creep **/
-
   run: function(creep) {
-    creep.memory.dropoff = this.dropoff;
-
     if (creep.memory.action == undefined) {
       for (var actionIndex in this.actionOrder) {
         var action = this.actionOrder[actionIndex];
-
+        
         if (action.start(creep)) {
           action.run(creep);
         }
