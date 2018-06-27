@@ -2,15 +2,26 @@
 
 class Retreat {
   constructor() {}
+  get [Symbol.toStringTag]() {
+    return "Retreat";
+  }
 
-  setup(creep) {}
+
+  setup(creep) {
+    return false;
+  }
   exec(creep) {}
   completed(creep) {}
   finish(creep) {}
+  score(creep) { return 0; }
 }
 
 class HarvestEnergy {
   constructor() {}
+
+  get [Symbol.toStringTag]() {
+    return "HarvestEnergy";
+  }
 
   setup(creep) {
     if (creep.memory.pos != undefined) {
@@ -18,12 +29,21 @@ class HarvestEnergy {
     }
     //Find mining position
     let miningPos = creep.room.memory.miningPositions;
-    let avaiablePosition = roomPositions.find(function(element) {
+    if(miningPos == null) {
+      console.warn("Unable to find Mining positions in room", creep.room);
+      return false;
+    }
+    let avaiablePosition = miningPos.find(function(element) {
       return element.safe == true && element.claimedBy == undefined;
     });
 
+    if(avaiablePosition == null) {
+      console.log("Unable to find a avaiablePosition for creep", creep, " in room ", creep.room);
+      return false;
+    }
+
     miningPos.claimedBy = creep.id;
-    creep.memory.pos = pos;
+    creep.memory.pos = miningPos;
     creep.memory.action = HarvestEnergy.name;
   }
 
@@ -61,14 +81,16 @@ class HarvestEnergy {
     result += creep.carry.energy / creep.carryCapacity;
   }
 }
-HarvestEnergy.NAME = 'HarvestEnergy';
 
 class DropoffEnergy {
   constructor() {}
+  get [Symbol.toStringTag]() {
+    return "DropoffEnergy";
+  }
 
   setup(creep) {
     if (creep.memory.pos != undefined) {
-      return;
+      return false;
     }
     //Find Target .. for now just pick a structure
     let targets = creep.room.find(FIND_STRUCTURES, {
@@ -79,6 +101,7 @@ class DropoffEnergy {
     });
     creep.memory.target = target[0].id;
     creep.memory.action = DropoffEnergy.name;
+    return true;
   }
 
   exec(creep) {
@@ -111,9 +134,13 @@ class DropoffEnergy {
 
 class UpgradeController {
   constructor() {}
+  get [Symbol.toStringTag]() {
+    return "UpgradeController";
+  }
 
   setup(creep) {
     creep.memory.name = UpgradeController.name;
+    return true;
   }
 
   exec(creep) {
@@ -135,7 +162,4 @@ class UpgradeController {
   }
 }
 
-module.exports.UpgradeController = UpgradeController;
-module.exports.Retreat = Retreat;
-module.exports.HarvestEnergy = HarvestEnergy;
-module.exports.DropoffEnergy = DropoffEnergy;
+module.exports = {UpgradeController, HarvestEnergy, DropoffEnergy, Retreat};
