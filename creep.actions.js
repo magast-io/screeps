@@ -1,6 +1,6 @@
 'use strict';
 
-export class Retreat {
+class Retreat {
   constructor() {}
 
   setup(creep) {}
@@ -9,7 +9,7 @@ export class Retreat {
   finish(creep) {}
 }
 
-export class HarvestEnergy {
+class HarvestEnergy {
   constructor() {}
 
   setup(creep) {
@@ -54,7 +54,7 @@ export class HarvestEnergy {
 
   score(creep) {
     let result = 0;
-    if(creep.memory.action == HarvestEnergy.name) {
+    if (creep.memory.action == HarvestEnergy.name) {
       result += 0.5;
     }
 
@@ -63,7 +63,7 @@ export class HarvestEnergy {
 }
 HarvestEnergy.NAME = 'HarvestEnergy';
 
-export class DropoffEnergy {
+class DropoffEnergy {
   constructor() {}
 
   setup(creep) {
@@ -102,14 +102,14 @@ export class DropoffEnergy {
 
   score(creep) {
     let result = 0;
-    if(creep.memory.action == DropoffEnergy) {
+    if (creep.memory.action == DropoffEnergy) {
       result += 0.5;
     }
     result += creep.carry.energy / creep.carryCapacity;
   }
 }
 
-export class UpgradeController {
+class UpgradeController {
   constructor() {}
 
   setup(creep) {
@@ -126,7 +126,7 @@ export class UpgradeController {
     return creep.energy <= 0;
   }
   finish(creep) {
-    delete creep.memory.action = UpgradeController.name;
+    delete creep.memory.action;
   }
 
   score(creep) {
@@ -135,3 +135,7 @@ export class UpgradeController {
   }
 }
 
+module.exports.UpgradeController = UpgradeController;
+module.exports.Retreat = Retreat;
+module.exports.HarvestEnergy = HarvestEnergy;
+module.exports.DropoffEnergy = DropoffEnergy;
