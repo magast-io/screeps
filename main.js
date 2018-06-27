@@ -23,7 +23,7 @@ module.exports.loop = function () {
   for(var name in Game.rooms)
   {
     var room = Game.rooms[name];
-    roomManager.run(room);
+    roomManager.exec(room);
   }
   creepManager.run();
   spawnManager.run();
