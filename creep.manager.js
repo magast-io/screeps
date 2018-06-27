@@ -1,6 +1,4 @@
-var roleHarvester = require('creep.role.harvester');
-var roleUpgrader = require('creep.role.upgrader');
-var roleBuilder = require('creep.role.builder');
+import CreepAI from 'creep.ai';
 
 module.exports = {
   /** @param **/
@@ -14,19 +12,10 @@ module.exports = {
     }
 
     //Run
+    let ai = new CreepAI();
     for (var name in Game.creeps) {
       var creep = Game.creeps[name];
-      switch (creep.memory.role) {
-        case roleHarvester.name:
-          roleHarvester.run(creep);
-          break;
-        case roleUpgrader.name:
-          roleUpgrader.run(creep);
-          break;
-        case roleBuilder.name:
-          roleBuilder.run(creep);
-          break;
-      }
+      ai.exec(creep);
     }
   },
 };
