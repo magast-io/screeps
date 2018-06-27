@@ -1,4 +1,4 @@
-import CreepAI from 'creep.ai';
+var CreepAI = require('creep.ai');
 
 module.exports = {
   /** @param **/
