@@ -43,7 +43,7 @@ class HarvestEnergy {
     }
 
     miningPos.claimedBy = creep.id;
-    creep.memory.pos = miningPos;
+    creep.memory.pos = avaiablePosition;
     creep.memory.action = HarvestEnergy.name;
   }
 
