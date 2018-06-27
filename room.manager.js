@@ -53,7 +53,7 @@ class RoomManager {
       let coords = memory.miningPositions[i].pos;
       let pos = room.getPositionAt(coords.x, coords.y);
       let hostile = pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-      memory.miningPositions[i].safe = hotile == null || !hostile.pos.inRangeTo(pos);
+      memory.miningPositions[i].safe = hostile == null || !hostile.pos.inRangeTo(pos);
     }
   }
 }
