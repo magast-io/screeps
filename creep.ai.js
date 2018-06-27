@@ -18,7 +18,7 @@ class CreepAI {
     }
 
     scores.sort(function(a, b) {
-      return a.score > b.score;
+      return a.score < b.score;
     });
 
     let next = this.actions[scores[0].name];

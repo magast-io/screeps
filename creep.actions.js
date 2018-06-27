@@ -127,9 +127,13 @@ class DropoffEnergy {
   score(creep) {
     let result = 0;
     if (creep.memory.action == DropoffEnergy) {
+      if(this.completed(creep)) {
+        return 0;
+      }
       result += 0.5;
     }
     result += creep.carry.energy / creep.carryCapacity;
+    return result;
   }
 }
 
