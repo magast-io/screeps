@@ -1,14 +1,15 @@
-var actions = require('creep.actions');
+var HarvestEnergy = require('creep.action.harvestenergy');
+var DropoffEnergy = require('creep.action.dropoffenergy');
+var Retreat = require('creep.action.retreat');
+var UpgradeController = require('creep.action.upgradecontroller');
 
 class CreepAI {
   constructor() {
     this.actions = {};
-    this.actions[actions.HarvestEnergy.name] = new actions.HarvestEnergy();
-    this.actions[actions.DropoffEnergy.name] = new actions.DropoffEnergy();
-    this.actions[
-      actions.UpgradeController.name
-    ] = new actions.UpgradeController();
-    this.actions[actions.Retreat.name] = new actions.Retreat();
+    this.actions[HarvestEnergy.name] = new HarvestEnergy();
+    this.actions[DropoffEnergy.name] = new DropoffEnergy();
+    this.actions[UpgradeController.name] = new UpgradeController();
+    this.actions[Retreat.name] = new Retreat();
   }
 
   exec(creep) {
