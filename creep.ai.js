@@ -33,3 +33,5 @@ class CreepAI {
     next.exec(creep);
   }
 }
+
+module.exports = CreepAI;
