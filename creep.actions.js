@@ -24,7 +24,7 @@ class HarvestEnergy {
   }
 
   setup(creep) {
-    if (creep.memory.pos != undefined) {
+    if (creep.memory.harvestPos != undefined) {
       return;
     }
     //Find mining position
@@ -33,26 +33,27 @@ class HarvestEnergy {
       console.warn("Unable to find Mining positions in room", creep.room);
       return false;
     }
-    let avaiablePosition = miningPos.find(function(element) {
+    let index = miningPos.findIndex(function(element) {
       return element.safe == true && element.claimedBy == undefined;
     });
-
-    if(avaiablePosition == null) {
+    
+    if(index == -1) {
       console.log("Unable to find a avaiablePosition for creep", creep, " in room ", creep.room);
       return false;
     }
-
-    miningPos.claimedBy = creep.id;
-    creep.memory.pos = avaiablePosition;
+    
+    let avaiablePosition = miningPos[index];
+    creep.room.memory.miningPositions[index].claimedBy = creep.id;
+    creep.memory.harvestPos = avaiablePosition;
     creep.memory.action = HarvestEnergy.name;
   }
 
   exec(creep) {
-    let source = Game.getObjectById(creep.memory.pos.source);
+    let source = Game.getObjectById(creep.memory.harvestPos.source);
     let result = creep.harvest(source);
 
     if (result == ERR_NOT_IN_RANGE) {
-      creep.moveTo(creep.memory.pos.pos.x, creep.memory.pos.pos.y, {
+      creep.moveTo(creep.memory.harvestPos.pos.x, creep.memory.harvestPos.pos.y, {
         visualizePathStyle: {stroke: '#FFAA00'},
       });
     }
@@ -63,7 +64,7 @@ class HarvestEnergy {
   }
 
   finish(creep) {
-    delete creep.memory.pos;
+    delete creep.memory.harvestPos;
     let miningPos = creep.room.memory.miningPositions.find(function(element) {
       return element.claimedBy == creep.id;
     });
