@@ -8,7 +8,6 @@ module.exports = {
     }
 
     Memory.debug = {};
-    Memory.debug.creepRoleCounts = creepRoleCounts;
 
     for (var roomName in Game.rooms) {
       var room = Game.rooms[roomName];
