@@ -14,10 +14,8 @@ module.exports = {
       var targetCreepCount = Math.ceil(
         room.memory.miningPositions.length * 1.5,
       );
-      if (creepRoleCounts[roleHarvester.name] < Math.floor(targetCreepCount)) {
-        var newName = "Creep_" + Game.time;
-        spawn.spawnCreep([WORK, CARRY, MOVE], newName);
-      }     
+      var newName = "Creep_" + Game.time;
+      spawn.spawnCreep([WORK, CARRY, MOVE], newName);
     }
   },
 };
