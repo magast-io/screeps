@@ -1,4 +1,4 @@
-var Actions = require('creep.actions');
+var Actions = require("creep.actions");
 
 class CreepAI {
   constructor() {
@@ -20,6 +20,8 @@ class CreepAI {
     scores.sort(function(a, b) {
       return a.score < b.score;
     });
+
+    creep.memory.debug.ai.scores = scores;
 
     let next = this.actions[scores[0].name];
 

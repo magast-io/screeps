@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 class Retreat {
   constructor() {}
@@ -54,7 +54,7 @@ class HarvestEnergy {
 
     if (result == ERR_NOT_IN_RANGE) {
       creep.moveTo(creep.memory.harvestPos.pos.x, creep.memory.harvestPos.pos.y, {
-        visualizePathStyle: {stroke: '#FFAA00'},
+        visualizePathStyle: {stroke: "#FFAA00"},
       });
     }
   }
@@ -76,12 +76,12 @@ class HarvestEnergy {
   score(creep) {
     let result = 0;
     if (creep.memory.action == HarvestEnergy.name) {
-      if(completed(creep)) {
+      if(this.completed(creep)) {
         return 0;
       }
       result += 0.5;
     }
-    result += creep.carry.energy / creep.carryCapacity;
+    result += (1 - (creep.carry.energy / creep.carryCapacity)) * 0.5;
     return result;
   }
 }
@@ -96,31 +96,39 @@ class DropoffEnergy {
     if (creep.memory.pos != undefined) {
       return false;
     }
-    //Find Target .. for now just pick a structure
-    let targets = creep.room.find(FIND_STRUCTURES, {
-      filter: structure => {
-        var needsEnergy = structure.energy < structure.energyCapacity;
-        return needsEnergy;
-      },
-    });
-    creep.memory.target = target[0].id;
+    let targets = [];
+    for (let resource in creep.carry) {
+      for (let i = 0; i < creep.room.data.structures.length; i++) {
+        let structure = creep.room.data.structures[i];
+        targets.push({id: structure.id, score: structure.data.resourceDemand(resource)});
+      }
+      
+      for(let i = 0; i < creep.room.data.constructionSites.length; i++) {
+        let constructionSite = creep.room.data.constructionSites[i];
+        targets.push({id: constructionSite.id, score: constructionSite.data.resourceDemand(resource)});
+      }
+    }
+
+    targets.sort(function(a,b) { return a.score < b.score })
+    
+    creep.memory.target = targets[0].id;
     creep.memory.action = DropoffEnergy.name;
     return true;
   }
 
   exec(creep) {
-    let result = creep.transfer(target, RESOURCE_ENERGY);
+    let result = creep.transfer(this.target(creep), RESOURCE_ENERGY);
     if (result == ERR_NOT_IN_RANGE) {
-      creep.moveTo(target, {visualizePathStyle: {stroke: '#FFFFFF'}});
+      creep.moveTo(this.target(creep), {visualizePathStyle: {stroke: "#FFFFFF"}});
     }
   }
 
-  get target() {
+  target(creep) {
     return Game.getObjectById(creep.memory.target);
   }
 
   completed(creep) {
-    return creep.energy == 0 || target.energy >= target.energyCapacity;
+    return creep.energy == 0 || this.target(creep).energy >= this.target(creep).energyCapacity;
   }
 
   finish(creep) {
@@ -135,7 +143,7 @@ class DropoffEnergy {
       }
       result += 0.5;
     }
-    result += creep.carry.energy / creep.carryCapacity;
+    result += (creep.carry.energy / creep.carryCapacity) * 0.5;
     return result;
   }
 }

@@ -18,6 +18,7 @@ class RoomManager {
       }
 
       RoomManager.checkMiningPosSafety(room);
+      RoomManager.clearDeadCreeps(room);
     }
   }
 
@@ -53,7 +54,23 @@ class RoomManager {
       let coords = memory.miningPositions[i].pos;
       let pos = room.getPositionAt(coords.x, coords.y);
       let hostile = pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-      memory.miningPositions[i].safe = hostile == null || !hostile.pos.inRangeTo(pos);
+      let result = hostile == null || !hostile.pos.inRangeTo(pos, 5);
+      memory.miningPositions[i].safe = result;
+    }
+  }
+
+  static clearDeadCreeps(room) {
+    let memory = room.memory;
+
+    for (let i = 0; i < memory.miningPositions.length; i++) {
+      let miningPos = memory.miningPositions[i];
+      if (miningPos.hasOwnProperty('claimedBy')) {
+        let creepId = miningPos.hasOwnProperty('claimedBy');
+        if (!Game.creeps.hasOwnProperty(creepId)) {
+          console.log('Removing claim for deleted creep', creepId);
+          delete miningPos.claimedBy;
+        }
+      }
     }
   }
 }
