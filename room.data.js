@@ -22,26 +22,45 @@ class StructureData {
   }
 
   get usesEnergy() {
-    return this.structure.hasOwnProperty('energyCapacity');
+    return this.structure.energyCapacity != undefined;
   }
 
   resourceDemand(resourceType) {
     if (resourceType == RESOURCE_ENERGY) {
-      if (!this.usesEnergy) return 0;
+      let mod = 1;
       switch (this.structure.structureType) {
+        case STRUCTURE_EXTENSION:
         case STRUCTURE_SPAWN: 
+          if(this.structure.energy >= this.structure.energyCapacity) {
+            return 0;
+          }
+          return 1;
+          /* 
+          //Old Spawner Logic, works when assuming spawner will keep spawning after hitting max screeps 
           let wanted = 0;
           for (let key in Game.rooms) {
             let room = Game.rooms[key];
             wanted = room.memory.miningPositions.length * 2;
           }
           let total = Object.keys(Game.creeps).length;
-          
-          return Math.pow((wanted / total), 0.333);
-        case STRUCTURE_EXTENSION: 
-          return 0.4;
+          //let result = Math.pow((total / wanted), 0.333);
+          let result = 1-(total / wanted);
+          console.log("Spawner Demand: ", result);
+          if(this.structure.structureType == STRUCTURE_SPAWN) {
+            mod = 0.9;
+          }
+          if(this.structure.energy == this.structure.energyCapacity) {
+            mod = 0;
+          }
+          return result * mod;
+        */
+        case STRUCTURE_TOWER:
+          if(this.structure.energy > this.structure.energyCapacity * 0.7) {
+            mod = 0;
+          }
+          return 0.3 * mod;
         case STRUCTURE_CONTROLLER:
-          return 0.3;
+          return 0.1;
         default:
           return 0;
       }
@@ -103,8 +122,7 @@ class ConstructionSiteData {
       return 0;
     }
     
-    let result = this.typeDemand * (1 - (this.site.progress / this.site.progressTotal));
-    console.log(this.typeDemand, this.site.progress, this.site.progressTotal, result);
+    let result = (this.typeDemand * 0.5) + (this.site.progress / this.site.progressTotal) * 0.5;
     return result;
   }
 }

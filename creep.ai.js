@@ -21,6 +21,12 @@ class CreepAI {
       return a.score < b.score;
     });
 
+    if(creep.memory.debug == undefined) {
+      creep.memory.debug = {};
+    }
+    if(creep.memory.debug.ai == undefined) {
+      creep.memory.debug.ai = {};
+    }
     creep.memory.debug.ai.scores = scores;
 
     let next = this.actions[scores[0].name];
@@ -30,10 +36,12 @@ class CreepAI {
         current.finish(creep);
       }
       if(!next.setup(creep)) {
+//        console.log("Setup ", creep, " with ", next);
         return;
       }
     }
 
+//    console.log("Exec ", creep, " with ", next);
     next.exec(creep);
   }
 }

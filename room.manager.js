@@ -1,16 +1,15 @@
 class RoomManager {
   static exec(room) {
-    const UPDATE_EVERY = 100;
+    const UPDATE_EVERY = 10;
 
     let memory = room.memory;
     let needsUpdate;
-    if (memory.hasOwnProperty('needsUpdateAt')) {
+    if (memory.needsUpdateAt != undefined) {
       needsUpdate = memory.needsUpdateAt < Game.time;
     } else {
       needsUpdate = true;
       memory.needsUpdateAt = 0;
     }
-
     if (needsUpdate) {
       memory.needsUpdateAt = Game.time + UPDATE_EVERY;
       if (memory.miningPositions == null) {
@@ -36,7 +35,7 @@ class RoomManager {
             var entity = entities[z];
             if (entity.type == 'terrain' && entity.terrain == 'plain') {
               memory.miningPositions.push({
-                pos: pos,
+                pos: {x: i, y: j, roomName: pos.roomName},
                 source: source.id,
                 safe: false,
               });
@@ -64,9 +63,9 @@ class RoomManager {
 
     for (let i = 0; i < memory.miningPositions.length; i++) {
       let miningPos = memory.miningPositions[i];
-      if (miningPos.hasOwnProperty('claimedBy')) {
-        let creepId = miningPos.hasOwnProperty('claimedBy');
-        if (!Game.creeps.hasOwnProperty(creepId)) {
+      if (miningPos.claimedBy != undefined) {
+        let creepId = miningPos.claimedBy;
+        if (Game.getObjectById(creepId) == undefined) {
           console.log('Removing claim for deleted creep', creepId);
           delete miningPos.claimedBy;
         }

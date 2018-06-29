@@ -4,21 +4,27 @@ var spawnManager = require('spawn.manager');
 var Data = require('room.data');
 
 module.exports.loop = function() {
-  /*var tower = Game.getObjectById("abc456b58bb9512f50d2ca92");
+  let tower = Game.getObjectById("5b367fec04e9a20734ba9d64");
   
   if(tower) {
+    let closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+    if(closestHostile) {
+      tower.attack(closestHostile);
+    }
+    
     let test = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-      filter: (structure) => structure.hits < structure.hitsMax
+      filter: (structure) => {
+        if(structure.structureType == STRUCTURE_WALL) {
+          return structure.hits < 300000;
+        }
+        return structure.hits < structure.hitsMax;
+      }
     });
     if(test) {
       tower.repair(test);
     }
 
-    var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-    if(closestHostile) {
-      tower.attack(closestHostile);
-    }
-  }*/
+  }
 
   for (let key in Game.rooms) {
     let room = Game.rooms[key];
@@ -32,7 +38,7 @@ module.exports.loop = function() {
   }
 
   for (let key in Game.constructionSites) {
-    let site = Game.constructionSites[site];
+    let site = Game.constructionSites[key];
     site.data = new Data.ConstructionSiteData(site);
     site.room.data.addConstructionSite(site);
   }
